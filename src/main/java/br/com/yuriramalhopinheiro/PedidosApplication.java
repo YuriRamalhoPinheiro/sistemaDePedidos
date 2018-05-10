@@ -1,6 +1,8 @@
 package br.com.yuriramalhopinheiro;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -12,13 +14,20 @@ import br.com.yuriramalhopinheiro.domain.Cidade;
 import br.com.yuriramalhopinheiro.domain.Cliente;
 import br.com.yuriramalhopinheiro.domain.Endereco;
 import br.com.yuriramalhopinheiro.domain.Estado;
+import br.com.yuriramalhopinheiro.domain.Pagamento;
+import br.com.yuriramalhopinheiro.domain.PagamentoNoBoleto;
+import br.com.yuriramalhopinheiro.domain.PagamentoNoCartao;
+import br.com.yuriramalhopinheiro.domain.Pedido;
 import br.com.yuriramalhopinheiro.domain.Produto;
+import br.com.yuriramalhopinheiro.domain.enums.EstadoDoPagamento;
 import br.com.yuriramalhopinheiro.domain.enums.TipoCliente;
 import br.com.yuriramalhopinheiro.repositories.CategoriaRepository;
 import br.com.yuriramalhopinheiro.repositories.CidadeRepository;
 import br.com.yuriramalhopinheiro.repositories.ClienteRepository;
 import br.com.yuriramalhopinheiro.repositories.EnderecoRepository;
 import br.com.yuriramalhopinheiro.repositories.EstadoRepository;
+import br.com.yuriramalhopinheiro.repositories.PagamentoRepository;
+import br.com.yuriramalhopinheiro.repositories.PedidoRepository;
 import br.com.yuriramalhopinheiro.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -41,6 +50,12 @@ public class PedidosApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(PedidosApplication.class, args);
@@ -78,11 +93,25 @@ public class PedidosApplication implements CommandLineRunner {
 				TipoCliente.PESSOA_FISICA);
 		cliente.setTelefones("33999292281");
 		cliente.setTelefones("3337313280");
-
+		
 		Endereco endereco = new Endereco(null, "Rua Santa Rita", "103", "casa", "Esplanada", "39600-000", cidade5, cliente);
 		Endereco endereco2 = new Endereco(null, "Avenida Principal", "350", "Apartamento", "Centro", "39656-000", cidade2, cliente);
 		
 		cliente.setEnderecos(Arrays.asList(endereco, endereco2));
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy hh:mm");
+		Date data = simpleDateFormat.parse("20/02/2018 15:38");
+		Date data2 = simpleDateFormat.parse("27/04/2018 14:35");
+		Date data3 = simpleDateFormat.parse("28/04/2018 20:25");
+		
+		Pedido pedido1 = new Pedido(null, data, cliente, endereco);
+		Pedido pedido2 = new Pedido(null, data2, cliente, endereco);
+		
+		Pagamento pagamentoNoCartao = new PagamentoNoCartao(null, EstadoDoPagamento.QUITADO, pedido1, 2);
+		Pagamento pagamentoNoBoleto = new PagamentoNoBoleto(null, EstadoDoPagamento.QUITADO, pedido2, data2, data3);
+		
+		pedido1.setPagamento(pagamentoNoCartao);
+		pedido2.setPagamento(pagamentoNoBoleto);
 		
 		this.categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
 		this.produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3));
@@ -90,6 +119,9 @@ public class PedidosApplication implements CommandLineRunner {
 		this.cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3, cidade5));
 		this.clienteRepository.saveAll(Arrays.asList(cliente));
 		this.enderecoRepository.saveAll(Arrays.asList(endereco, endereco2));
+		this.pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+		this.pagamentoRepository.saveAll(Arrays.asList(pagamentoNoBoleto, pagamentoNoCartao));
+		
 	}
 
 }
