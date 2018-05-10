@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class Estado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+	//TODO Adicionar validações para os atributos
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
