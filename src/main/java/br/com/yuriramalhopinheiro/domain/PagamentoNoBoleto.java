@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import br.com.yuriramalhopinheiro.domain.enums.EstadoDoPagamento;
 
 @Entity
@@ -13,7 +15,10 @@ public class PagamentoNoBoleto extends Pagamento{
 	
 	private static final long serialVersionUID = 1L;
 	
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataDeVencimento;
+	
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataDePagamento;
 	
 	public PagamentoNoBoleto() {

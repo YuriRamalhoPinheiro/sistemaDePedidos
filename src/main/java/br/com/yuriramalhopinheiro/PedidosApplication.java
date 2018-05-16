@@ -138,6 +138,7 @@ public class PedidosApplication implements CommandLineRunner {
 		this.pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
 		this.pagamentoRepository.saveAll(Arrays.asList(pagamentoNoBoleto, pagamentoNoCartao));
 		this.itemDoPedidoRepository.saveAll(Arrays.asList(item1, item2, item3));
+	
 	}
 
 }
