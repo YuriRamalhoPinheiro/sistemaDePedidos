@@ -2,7 +2,9 @@ package br.com.yuriramalhopinheiro.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -21,24 +24,25 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	//TODO Adicionar validações para os atributos
+
+	// TODO Adicionar validações para os atributos
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(name="nome", length=150, nullable=false)
+
+	@Column(name = "nome", length = 150, nullable = false)
 	private String nome;
-	
-	@Column(name="preco", precision=10, scale=2, nullable=false)
+
+	@Column(name = "preco", precision = 10, scale = 2, nullable = false)
 	private Double preco;
-	
+
 	@JsonBackReference
 	@ManyToMany
-	@JoinTable(name="produto_categoria", 
-				joinColumns = @JoinColumn(name="produto_id"),
-				inverseJoinColumns = @JoinColumn(name="categoria_id")
-	)
+	@JoinTable(name = "produto_categoria", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private List<Categoria> categorias = new ArrayList<>();
+
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemDoPedido> itens = new HashSet<>();
 
 	public Produto() {
 	}
@@ -48,6 +52,16 @@ public class Produto implements Serializable {
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
+	}
+
+	public List<Pedido> getPedidos() {
+		List<Pedido> pedidos = new ArrayList<>();
+
+		for (ItemDoPedido item : itens) {
+			pedidos.add(item.getPedido());
+		}
+
+		return pedidos;
 	}
 
 	public Integer getId() {
@@ -80,6 +94,23 @@ public class Produto implements Serializable {
 
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
+	}
+
+	public Set<ItemDoPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemDoPedido> itens) {
+		this.itens = itens;
+	}
+
+	public void setItens(List<ItemDoPedido> itens) {
+		for (ItemDoPedido item : itens) {
+			
+			if (! this.itens.contains(item)) {
+				this.itens.add(item);
+			}
+		}
 	}
 
 	@Override
