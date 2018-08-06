@@ -7,5 +7,7 @@ import br.com.yuriramalhopinheiro.domain.Produto;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
-
+	
+	
+	
 }

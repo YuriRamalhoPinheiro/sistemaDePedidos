@@ -36,7 +36,7 @@ import br.com.yuriramalhopinheiro.repositories.ProdutoRepository;
 public class PedidosApplication implements CommandLineRunner {
 
 	@Autowired
-	private CategoriaRepository categoriaRepository;
+	private CategoriaRepository categoriaRepository; 
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
