@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.com.yuriramalhopinheiro</groupId>
-	<artifactId>pedidos</artifactId>
+	<artifactId>pedidos-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
